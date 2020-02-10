@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import com.datingapp.springjwt.models.ERole;
 import com.datingapp.springjwt.models.Role;
 import com.datingapp.springjwt.models.User;
@@ -30,20 +28,13 @@ import com.datingapp.springjwt.repository.RoleRepository;
 import com.datingapp.springjwt.repository.UserRepository;
 import com.datingapp.springjwt.security.jwt.JwtUtils;
 import com.datingapp.springjwt.security.services.UserDetailsImpl;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import com.datingapp.springjwt.services.S3Services;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	private static final String FILE_DIRECTORY = "/users";
+	
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -60,8 +51,10 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 	
+	@Autowired
+	S3Services s3Services;
 	
-
+	
 	  
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -105,9 +98,9 @@ public class AuthController {
 							 signUpRequest.getProfilefor(),
 							 signUpRequest.getReligion(),
 							 signUpRequest.getDob(),signUpRequest.getGender(),signUpRequest.getMaritalStatus(),
-							 signUpRequest.getFile()
+							 "NULL"
 							);
-
+		
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 
@@ -140,7 +133,8 @@ public class AuthController {
 
 		user.setRoles(roles);
 		userRepository.save(user);
-
+		s3Services.uploadFile(signUpRequest.getUsername(), signUpRequest.getFile());
+		
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	

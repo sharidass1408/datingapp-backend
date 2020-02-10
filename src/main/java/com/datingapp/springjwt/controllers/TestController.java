@@ -8,10 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.datingapp.springjwt.models.User;
 import com.datingapp.springjwt.repository.UserRepository;
+import com.datingapp.springjwt.services.S3Services;
 
 
 
@@ -20,10 +25,18 @@ import com.datingapp.springjwt.repository.UserRepository;
 @RequestMapping("/api/test")
 public class TestController {
 
+	@Autowired
+	S3Services s3Services;
 	
 	@Autowired
 	UserRepository userRepository;
 	
+	@PostMapping("/upload")
+	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	    public String uploadMultipartFile(@RequestParam("keyname") String keyName, @RequestParam("uploadfile") MultipartFile file) {
+		//	s3Services.uploadFile(keyName, file);
+			return "Upload Successfully. -> KeyName = " + keyName;
+	  }    
 	
 	
 	@GetMapping("/all")
