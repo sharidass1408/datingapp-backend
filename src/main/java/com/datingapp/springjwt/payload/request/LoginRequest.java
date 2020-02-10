@@ -1,4 +1,4 @@
-package com.bezkoder.springjwt.payload.request;
+package com.datingapp.springjwt.payload.request;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,4 +1,5 @@
-package com.bezkoder.springjwt.controllers;
+package com.datingapp.springjwt.controllers;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +10,22 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.datingapp.springjwt.models.User;
+import com.datingapp.springjwt.repository.UserRepository;
 
-import com.bezkoder.springjwt.models.User;
-import com.bezkoder.springjwt.repository.UserRepository;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+
+	
 	@Autowired
 	UserRepository userRepository;
+	
+	
+	
 	@GetMapping("/all")
 	public String allAccess() {
 		return "Public Content.";
@@ -39,6 +46,7 @@ public class TestController {
 		
 		return users;
 	}
+		
 	
 	@GetMapping("/mod")
 	@PreAuthorize("hasRole('MODERATOR')")

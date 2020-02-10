@@ -1,14 +1,10 @@
-package com.bezkoder.springjwt.controllers;
+package com.datingapp.springjwt.controllers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-import javax.xml.bind.DatatypeConverter;
-
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,32 +17,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.bezkoder.springjwt.models.ERole;
-import com.bezkoder.springjwt.models.Role;
-import com.bezkoder.springjwt.models.User;
-import com.bezkoder.springjwt.payload.request.LoginRequest;
-import com.bezkoder.springjwt.payload.request.SignupRequest;
-import com.bezkoder.springjwt.payload.response.JwtResponse;
-import com.bezkoder.springjwt.payload.response.MessageResponse;
-import com.bezkoder.springjwt.repository.RoleRepository;
-import com.bezkoder.springjwt.repository.UserRepository;
-import com.bezkoder.springjwt.security.jwt.JwtUtils;
-import com.bezkoder.springjwt.security.services.UserDetailsImpl;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.datingapp.springjwt.models.ERole;
+import com.datingapp.springjwt.models.Role;
+import com.datingapp.springjwt.models.User;
+import com.datingapp.springjwt.payload.request.LoginRequest;
+import com.datingapp.springjwt.payload.request.SignupRequest;
+import com.datingapp.springjwt.payload.response.JwtResponse;
+import com.datingapp.springjwt.payload.response.MessageResponse;
+import com.datingapp.springjwt.repository.RoleRepository;
+import com.datingapp.springjwt.repository.UserRepository;
+import com.datingapp.springjwt.security.jwt.JwtUtils;
+import com.datingapp.springjwt.security.services.UserDetailsImpl;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -67,7 +59,10 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	
 
+	  
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -148,32 +143,8 @@ public class AuthController {
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
-	 // Handling single file upload request
-	   @PostMapping("/singleFileUpload")
-	   public String singleFileUpload(@RequestParam("file") MultipartFile file)
-	         throws IOException {
-
-	      // Save file on system
-	      if (!file.getOriginalFilename().isEmpty()) {
-	         BufferedOutputStream outputStream = new BufferedOutputStream(
-	               new FileOutputStream(
-	                     new File(FILE_DIRECTORY, file.getOriginalFilename())));
-	         outputStream.write(file.getBytes());
-	         outputStream.flush();
-	         outputStream.close();
-
-	        // model.addAttribute("msg", "File uploaded successfully.");
-	      } else {
-	       //  model.addAttribute("msg", "Please select a valid file..");
-	      }
-
-	      return "fileUploadForm";
-	   }
+	
 
 
-	public void storeFile(MultipartFile file) throws IOException {
-		Path filePath = Paths.get(FILE_DIRECTORY + "/" + file.getOriginalFilename());
- 
-		Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-	}
+
 }

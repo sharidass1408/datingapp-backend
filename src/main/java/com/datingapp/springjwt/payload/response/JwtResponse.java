@@ -1,4 +1,4 @@
-package com.bezkoder.springjwt.payload.response;
+package com.datingapp.springjwt.payload.response;
 
 import java.util.List;
 
