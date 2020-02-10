@@ -1,4 +1,4 @@
-package com.bezkoder.springjwt.models;
+package com.datingapp.springjwt.models;
 
 public enum Gender {
     Male("male"), Female("Female");
